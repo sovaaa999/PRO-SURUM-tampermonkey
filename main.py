@@ -683,7 +683,9 @@ class MainWindow(QtWidgets.QFrame):
     def _check_message_timeout(self):
         """Belirli süre mesaj gelmezse yayını dener ve yeni bekleme süresi başlatır"""
         # YENİ: Yayın kapalıysa timeout kontrolü yapma
-        if self.chat_fetcher and self.chat_fetcher.isRunning() and not self._is_stream_offline:
+        if self._is_stream_offline:
+            return  # Yayın kapalıysa mesaj timeout sayacı çalışmasın
+        if self.chat_fetcher and self.chat_fetcher.isRunning():
             if self._last_message_time is None:  # Henüz hiç mesaj alınmadıysa deneme yapma
                 return
             current_time = time.time()
@@ -1055,10 +1057,13 @@ class MainWindow(QtWidgets.QFrame):
         self.status_label.setText(text)
         self.status_label.setStyleSheet(f"background: {color}; color: #fff; border-radius: 10px; padding: 8px 0; font-size: 22px;")
         # Yayın durumu güncelle
+        prev_offline = getattr(self, '_is_stream_offline', False)
         if any(kw in text.lower() for kw in ["beklemede", "kapalı", "sona erdi", "yayıncı geliyor", "durduruldu"]):
             self._is_stream_offline = True
         elif "bağlandı" in text.lower() or "hazır" in text.lower() or "chat başlatıldı" in text.lower():
             self._is_stream_offline = False
+            if prev_offline:
+                self._last_message_time = time.time()
     def show_toast(self, text, color):
         # Selenium InvalidSessionIdException gibi uzun hata mesajlarını kısalt
         if "invalidsessionidexception" in text.lower() or "message: invalid" in text.lower() or "stacktrace" in text.lower():
