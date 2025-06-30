@@ -1,0 +1,236 @@
+// ==UserScript==
+// @name         Chat Message Buffer (Her Mesajı Alır)
+// @namespace    http://tampermonkey.net/
+// @version      3.3
+// @description  Chat mesajlarını DOM'a eklendikçe Python'a iletir, tekrarları engellemez
+// @match        https://bigolive.tv/*
+// @match        https://*.bigolive.tv/*
+// @grant        none
+// ==/UserScript==
+
+(function() {
+    'use strict';
+
+    // Python'ın okuyacağı global mesaj arabelleği
+    if (typeof window._myChatBuffer === 'undefined') {
+        window._myChatBuffer = [];
+    }
+
+    // İşlenmiş elementleri takip etmek için Set
+    let processedElements = new WeakSet();
+    let currentObserver = null;
+    let isRunning = false;
+
+    // Chat container'ını bul
+    function findChatContainer() {
+        const selectors = [
+            '.chat-list',
+            '.chat-container',
+            '.chat-messages',
+            '.chat-area',
+            '.message-list',
+            '.chat-box',
+            '[class*="chat"]',
+            '[class*="message"]',
+            '.live-chat',
+            '.chat-panel',
+            'body' // Son çare olarak body'yi kullan
+        ];
+
+        for (let selector of selectors) {
+            const container = document.querySelector(selector);
+            if (container) {
+                console.log('Chat container bulundu:', selector);
+                return container;
+            }
+        }
+
+        console.log('Chat container bulunamadı, body kullanılıyor');
+        return document.body;
+    }
+
+    // Mesaj elementlerini bul
+    function findMessageElements(container) {
+        const messageSelectors = [
+            'div.chat-item-inner',
+            '.chat-item',
+            '.message-item',
+            '.chat-message',
+            '.message',
+            '[class*="message"]',
+            '[class*="chat-item"]',
+            '.msg',
+            '.text'
+        ];
+
+        for (let selector of messageSelectors) {
+            const elements = container.querySelectorAll(selector);
+            if (elements.length > 0) {
+                console.log('Mesaj elementleri bulundu:', selector, elements.length);
+                return elements;
+            }
+        }
+
+        return [];
+    }
+
+    // Yeni mesaj işleme fonksiyonu
+    function handleNewMessage(element) {
+        // Bu element daha önce işlendiyse atla
+        if (processedElements.has(element)) {
+            return;
+        }
+
+        try {
+            const messageText = element.textContent.trim();
+            if (!messageText || messageText.length < 2) return;
+
+            // Elementi işlenmiş olarak işaretle
+            processedElements.add(element);
+
+            // Mesajı buffer'a ekle
+            window._myChatBuffer.push(messageText);
+
+            // Buffer'ı temizle (son 200 mesajı tut)
+            if (window._myChatBuffer.length > 200) {
+                window._myChatBuffer.shift();
+            }
+
+            console.log('Yeni mesaj alındı:', messageText);
+
+        } catch (error) {
+            console.error('Mesaj işleme hatası:', error);
+        }
+    }
+
+    // Observer'ı durdur
+    function stopObserver() {
+        if (currentObserver) {
+            currentObserver.disconnect();
+            currentObserver = null;
+        }
+        isRunning = false;
+    }
+
+    // MutationObserver ile yeni mesajları izle
+    function startObserver() {
+        // Önceki observer'ı durdur
+        stopObserver();
+
+        const chatContainer = findChatContainer();
+
+        // Mevcut mesajları işleme - KALDIRILDI (çift mesaj sorunu için)
+        // const existingMessages = findMessageElements(chatContainer);
+        // existingMessages.forEach(handleNewMessage);
+
+        // Yeni mesajları izle
+        currentObserver = new MutationObserver((mutations) => {
+            mutations.forEach((mutation) => {
+                if (mutation.type === 'childList') {
+                    mutation.addedNodes.forEach((node) => {
+                        if (node.nodeType === Node.ELEMENT_NODE) {
+                            // Yeni eklenen element chat mesajı mı kontrol et
+                            const messageSelectors = [
+                                'div.chat-item-inner',
+                                '.chat-item',
+                                '.message-item',
+                                '.chat-message',
+                                '.message',
+                                '[class*="message"]',
+                                '[class*="chat-item"]'
+                            ];
+
+                            for (let selector of messageSelectors) {
+                                if (node.matches && node.matches(selector)) {
+                                    handleNewMessage(node);
+                                    break; // İlk eşleşmede dur
+                                }
+                            }
+
+                            // Alt elementlerde chat mesajı var mı kontrol et - KALDIRILDI (çift mesaj sorunu için)
+                            // const chatMessages = findMessageElements(node);
+                            // if (chatMessages.length > 0) {
+                            //     chatMessages.forEach(handleNewMessage);
+                            // }
+                        }
+                    });
+                }
+            });
+        });
+
+        // Observer'ı başlat
+        currentObserver.observe(chatContainer, {
+            childList: true,
+            subtree: true
+        });
+
+        isRunning = true;
+        console.log('MutationObserver başlatıldı - Sadece yeni mesajlar işlenecek, çift mesaj önlendi');
+    }
+
+    // Sayfa URL'sini kontrol et ve değişiklik varsa yeniden başlat
+    let lastUrl = location.href;
+    function checkUrlChange() {
+        if (location.href !== lastUrl) {
+            console.log('URL değişti, Chat Reader yeniden başlatılıyor...');
+            lastUrl = location.href;
+            // URL değişikliğinden sonra kısa bir bekleme
+            setTimeout(() => {
+                startObserver();
+            }, 1000);
+        }
+    }
+
+    // Ana başlatma fonksiyonu
+    function startMessageProcessing() {
+        console.log('Chat Reader başlatıldı (Her mesajı alır)');
+
+        // İlk observer'ı başlat
+        startObserver();
+
+        // Her 5 saniyede bir URL değişikliğini kontrol et
+        setInterval(checkUrlChange, 5000);
+
+        // Her 10 saniyede bir chat container'ı kontrol et (sayfa yenilendiğinde)
+        setInterval(() => {
+            const chatContainer = findChatContainer();
+            if (!chatContainer || !document.contains(chatContainer) || !isRunning) {
+                console.log('Chat container kayboldu veya observer durdu, yeniden başlatılıyor...');
+                startObserver();
+            }
+        }, 10000);
+    }
+
+    // Sayfa yüklendiğinde başlat
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', startMessageProcessing);
+    } else {
+        startMessageProcessing();
+    }
+
+    // Sayfa yenilendiğinde veya kapatıldığında observer'ı temizle
+    window.addEventListener('beforeunload', stopObserver);
+
+    // Global fonksiyonlar (Python'dan çağrılabilir)
+    window.getChatMessages = function() {
+        return window._myChatBuffer || [];
+    };
+
+    window.clearChatBuffer = function() {
+        window._myChatBuffer = [];
+        processedElements = new WeakSet(); // İşlenmiş elementleri de temizle
+    };
+
+    window.restartChatReader = function() {
+        console.log('Chat Reader manuel olarak yeniden başlatılıyor...');
+        startObserver();
+    };
+
+    window.stopChatReader = function() {
+        console.log('Chat Reader manuel olarak durduruluyor...');
+        stopObserver();
+    };
+
+    console.log('Chat Reader yüklendi (Her mesajı alır, URL değişikliklerini takip eder)');
+
+})();

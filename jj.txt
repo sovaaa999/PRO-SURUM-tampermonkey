@@ -1,0 +1,46 @@
+1. Yeni Uygulama Kurulum Komutları ve Sırası
+A. Proje Başlangıcı
+Yeni bir klasör oluştur ve yeni bir Python projesi başlat:
+CopyInsert
+Yeni bir stream chat panel uygulaması başlat. Proje adını ve ana klasörü belirt.
+Gerekli kütüphaneleri ve requirements.txt oluştur:
+CopyInsert
+Gerekli Python kütüphanelerini (PyQt5, selenium, vs.) requirements.txt ile oluştur.
+Modern, sade ve kullanıcı dostu bir arayüz (GUI) tasarla:
+CopyInsert
+PyQt5 ile koyu temalı, ayar paneli ve başlat/durdur butonları olan bir arayüz oluştur.
+B. Chat Takip ve Otomasyon Özellikleri
+Selenium ile tarayıcıdan chat mesajı çekme altyapısı kur:
+CopyInsert
+Selenium ile verilen linkteki chat mesajlarını DOM’dan çekebilen bir altyapı oluştur.
+platforms.json ile platforma özel selector desteği ekle:
+CopyInsert
+Her platform için chat ve yayın kapalı selector’larını platforms.json ile yönet.
+Yayın kapalıysa otomatik tekrar deneme ve aralık ayarı ekle:
+CopyInsert
+Yayın kapalıysa belirli aralıklarla otomatik tekrar bağlanma özelliği ekle. Aralığı kullanıcı ayarlayabilsin.
+Tarayıcı kapanırsa otomatik yeniden başlatma ekle:
+CopyInsert
+Tarayıcı kapanırsa veya bağlantı koparsa otomatik olarak yeni bir driver başlat ve tekrar bağlan.
+C. Hata Yönetimi ve Kullanıcı Bildirimi
+Gelişmiş hata yönetimi ve kullanıcıya sade bildirimler ekle:
+CopyInsert
+Sadece önemli hataları kullanıcıya göster, diğerlerini sessizce yönet. Durum değişikliklerini arayüzde bildir.
+D. Esneklik ve Geliştirilebilirlik
+Kolayca yeni platform eklenebilen, ayar dosyasından güncellenebilen bir yapı kur:
+CopyInsert
+platforms.json veya benzeri bir dosyadan platform ekleme/çıkarma işlemini kod değiştirmeden yapabil.
+Tüm kodu ve dosya yapısını iyi belgelenmiş şekilde oluştur:
+CopyInsert
+Kodun ve ayar dosyalarının kullanımını açıklayan bir README.md hazırla.
+2. Sana Önerdiğim Komut Dizisi (Yazılı olarak bana sırayla iletebilirsin)
+Yeni bir stream chat panel uygulaması başlat. Proje adını ve ana klasörü belirt.
+Gerekli Python kütüphanelerini (PyQt5, selenium, vs.) requirements.txt ile oluştur.
+Modern, koyu temalı ve kullanıcı dostu bir PyQt5 arayüzü oluştur.
+Selenium ile verilen linkteki chat mesajlarını DOM’dan çekebilen bir altyapı kur.
+Her platform için chat ve yayın kapalı selector’larını platforms.json ile yönet.
+Yayın kapalıysa belirli aralıklarla otomatik tekrar bağlanma özelliği ekle. Aralığı kullanıcı ayarlayabilsin.
+Tarayıcı kapanırsa otomatik olarak yeni bir driver başlat ve tekrar bağlan.
+Sadece önemli hataları kullanıcıya göster, diğerlerini sessizce yönet. Durum değişikliklerini arayüzde bildir.
+platforms.json’dan kolayca platform ekleme/çıkarma yapılabilen bir yapı kur.
+Kodun ve ayar dosyalarının kullanımını açıklayan bir README.md hazırla.

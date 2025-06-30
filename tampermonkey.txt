@@ -1,0 +1,89 @@
+// ==UserScript==
+// @name         Chat Message to Flask (BigoLive örneği)
+// @namespace    http://tampermonkey.net/
+// @version      1.0
+// @description  Chat mesajlarını Flask sunucusuna gönderir
+// @match        https://bigolive.tv/*
+// @match        https://.bigolive.tv/
+// @grant        none
+// ==/UserScript==
+
+(function() {
+    'use strict';
+
+    // İşlenmiş elementleri takip etmek için WeakSet
+    let processedElements = new WeakSet();
+
+    // Flask'a mesaj gönder
+    function sendMessageToFlask(message) {
+        fetch('http://localhost:5000/message', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({message: message})
+        }).then(r => r.json()).then(resp => {
+            console.log("Flask'a gönderildi:", message, resp);
+        }).catch(e => {
+            console.error("Flask'a gönderilemedi:", e);
+        });
+    }
+
+    // Yeni mesaj işleme fonksiyonu
+    function handleNewMessage(element) {
+        if (processedElements.has(element)) return;
+        try {
+            const messageText = element.textContent.trim();
+            if (!messageText || messageText.length < 2) return;
+            processedElements.add(element);
+            sendMessageToFlask(messageText);
+            console.log('Yeni mesaj alındı ve Flask\'a gönderildi:', messageText);
+        } catch (error) {
+            console.error('Mesaj işleme hatası:', error);
+        }
+    }
+
+    // Chat container'ı ve mesaj selector'ı
+    function findChatContainer() {
+        // BigoLive için örnek selector, gerekirse değiştir
+        return document.querySelector('.chat-list') || document.body;
+    }
+    const messageSelectors = [
+        'div.chat-item-inner',
+        '.chat-item',
+        '.message-item',
+        '.chat-message',
+        '.message',
+        '[class*="message"]',
+        '[class*="chat-item"]'
+    ];
+
+    // MutationObserver ile yeni mesajları izle
+    function startObserver() {
+        const chatContainer = findChatContainer();
+        if (!chatContainer) return;
+        const observer = new MutationObserver((mutations) => {
+            mutations.forEach((mutation) => {
+                if (mutation.type === 'childList') {
+                    mutation.addedNodes.forEach((node) => {
+                        if (node.nodeType === Node.ELEMENT_NODE) {
+                            for (let selector of messageSelectors) {
+                                if (node.matches && node.matches(selector)) {
+                                    handleNewMessage(node);
+                                    break;
+                                }
+                            }
+                        }
+                    });
+                }
+            });
+        });
+        observer.observe(chatContainer, {childList: true, subtree: true});
+        console.log('Chat Flask entegrasyonu AKTİF!');
+    }
+
+    // Sayfa yüklendiğinde başlat
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', startObserver);
+    } else {
+        startObserver();
+    }
+})();
