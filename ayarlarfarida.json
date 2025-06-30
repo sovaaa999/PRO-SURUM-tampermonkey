@@ -1,0 +1,109 @@
+{
+  "last_link": "https://www.bigolive.tv/tr/Emily93emy",
+  "last_selector": "div.chat-item-inner",
+  "last_platform": "BigoLive",
+  "platforms": {
+    "BigoLive": {
+      "chat": "div.chat-item-inner",
+      "status": [
+        {
+          "type": "text",
+          "selector": ".end-title",
+          "text": "CANLI YAYIN sona erdi"
+        },
+        {
+          "type": "text",
+          "selector": ".live--off-title",
+          "text": "Yayıncı geliyor"
+        }
+      ]
+    },
+    "YouTube": {
+      "chat": "#chat #items > *",
+      "status": []
+    },
+    "Twitch": {
+      "chat": ".chat-scrollable-area__message-container",
+      "status": []
+    },
+    "Kick": {
+      "chat": ".chat-messages-container .chat-message",
+      "status": []
+    },
+    "Tango": {
+      "chat": ".chat-messages .message",
+      "status": []
+    },
+    "TikTok": {
+      "chat": ".chat-item",
+      "status": []
+    },
+    "Diğer": {
+      "chat": "",
+      "status": []
+    }
+  },
+  "chat_method": "DOM",
+  "status_retry_interval": 5,
+  "spam_prevention_time": 10,
+  "groups": [
+    {
+      "words": [
+        "sent a,x1",
+        "sent a,x2",
+        "sent a,x3",
+        "sent a,x4",
+        "sent a,x5",
+        "sent a,x6",
+        "sent a,x7",
+        "sent a,x9",
+        "sent a,x8",
+        "sent a,x188"
+      ],
+      "sounds": [
+        "C:/Users/muham/Downloads/FARIDA/GIFTT/AnyConv.com__WhatsApp Ses 2025-05-24 saat 03.04.25_8d2157a8.waptt.wav",
+        "C:/Users/muham/Downloads/FARIDA/GIFTT/AnyConv.com__WhatsApp Ses 2025-05-24 saat 03.04.51_12e60d2e.waptt.wav",
+        "C:/Users/muham/Downloads/FARIDA/GIFTT/AnyConv.com__WhatsApp Ses 2025-05-24 saat 03.05.14_eb002b03.waptt.wav",
+        "C:/Users/muham/Downloads/FARIDA/GIFTT/AnyConv.com__WhatsApp Ses 2025-05-24 saat 03.05.27_ae355805.waptt.wav",
+        "C:/Users/muham/Downloads/FARIDA/GIFTT/AnyConv.com__WhatsApp Ses 2025-05-24 saat 03.05.48_e656861d.waptt.wav",
+        "C:/Users/muham/Downloads/FARIDA/GIFTT/AnyConv.com__WhatsApp Ses 2025-05-24 saat 03.06.18_3b6ad12b.waptt.wav",
+        "C:/Users/muham/Downloads/FARIDA/GIFTT/AnyConv.com__WhatsApp Ses 2025-05-24 saat 03.06.43_c7a25f2d.waptt - Kopya.wav",
+        "C:/Users/muham/Downloads/FARIDA/GIFTT/AnyConv.com__WhatsApp Ses 2025-05-24 saat 03.06.43_c7a25f2d.waptt.wav",
+        "C:/Users/muham/Downloads/FARIDA/GIFTT/AnyConv.com__WhatsApp Ses 2025-05-24 saat 03.07.18_9ec50073.waptt.wav",
+        "C:/Users/muham/Downloads/FARIDA/GIFTT/AnyConv.com__WhatsApp Ses 2025-05-24 saat 03.08.58_85919558.waptt.wav",
+        "C:/Users/muham/Downloads/FARIDA/GIFTT/AnyConv.com__WhatsApp Ses 2025-05-24 saat 03.08.58_dec5e4c8.waptt.wav",
+        "C:/Users/muham/Downloads/FARIDA/GIFTT/AnyConv.com__WhatsApp Ses 2025-05-24 saat 03.09.36_943de13d.waptt.wav",
+        "C:/Users/muham/Downloads/FARIDA/GIFTT/AnyConv.com__WhatsApp Ses 2025-05-28 saat 08.24.18_25a26408.waptt.wav",
+        "C:/Users/muham/Downloads/FARIDA/GIFTT/AnyConv.com__WhatsApp Ses 2025-05-28 saat 08.24.33_f04bb3ab.waptt.wav",
+        "C:/Users/muham/Downloads/FARIDA/GIFTT/AnyConv.com__WhatsApp Ses 2025-05-28 saat 08.25.04_6e8c1915.waptt.wav",
+        "C:/Users/muham/Downloads/FARIDA/GIFTT/AnyConv.com__WhatsApp Ses 2025-05-28 saat 08.25.39_1a7f89fb.waptt.wav",
+        "C:/Users/muham/Downloads/FARIDA/GIFTT/AnyConv.com__WhatsApp Ses 2025-05-28 saat 08.25.53_bb2ef9f8.waptt.wav",
+        "C:/Users/muham/Downloads/FARIDA/GIFTT/AnyConv.com__WhatsApp Ses 2025-05-28 saat 08.26.13_46c71b19.waptt.wav",
+        "C:/Users/muham/Downloads/FARIDA/GIFTT/WhatsApp-Ses-2025-05-28-saat-08.33.06_b8fbaa72.waptt.wav",
+        "C:/Users/muham/Downloads/FARIDA/GIFTT/WhatsApp-Ses-2025-05-28-saat-08.33.20_2bfa780d.waptt.wav",
+        "C:/Users/muham/Downloads/FARIDA/GIFTT/WhatsApp-Ses-2025-05-28-saat-08.33.39_646702e9.waptt.wav",
+        "C:/Users/muham/Downloads/FARIDA/GIFTT/WhatsApp-Ses-2025-05-28-saat-08.34.10_cabe68a6.waptt.wav",
+        "C:/Users/muham/Downloads/FARIDA/GIFTT/WhatsApp-Ses-2025-05-28-saat-08.34.39_a4fa577b.waptt.wav",
+        "C:/Users/muham/Downloads/FARIDA/GIFTT/WhatsApp-Ses-2025-05-28-saat-08.35.16_75c2ca74.waptt.wav",
+        "C:/Users/muham/Downloads/FARIDA/GIFTT/WhatsApp-Ses-2025-05-28-saat-08.35.59_1fce2035.waptt.wav",
+        "C:/Users/muham/Downloads/FARIDA/GIFTT/WhatsApp-Ses-2025-05-28-saat-08.36.24_27f294cf.waptt.wav"
+      ]
+    }
+  ],
+  "message_retry_interval": 120,
+  "yasakli_kelime": [
+    "tea,x1",
+    "flower,x1",
+    "love,x1",
+    "gold,x1",
+    "bell,x1",
+    "leo,x1",
+    "sea,x1",
+    "çay,x1",
+    "duck,x1",
+    "perfect,match",
+    "rose,x1",
+    "hayde",
+    "türk,x1"
+  ]
+}
